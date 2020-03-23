@@ -19,10 +19,14 @@ subset$datetime <- strptime(subset$datetime, "%d/%m/%Y %H:%M:%S")
 
 class(subset$datetime)
 
-## Create graph of global active power over time, based on the "subset" dataset
+## Create file and set dimensions.
 
-plot2 <- plot(subset$datetime, subset$Global_active_power, type = "l", xlab = "Day/Time", ylab = "Global Active Power (kilowatts)")
+png("plot2.png", width=480, height=480)
 
-##Create PNG file
+## Create graph of global active power over time.
 
-png("plot2.png")
+plot(subset$datetime, subset$Global_active_power, type="l", xlab="", ylab="Global Active Power (kilowatts)")
+
+## Reset device
+
+dev.off()

@@ -1,12 +1,13 @@
 ## Read in household power consumption data set
 
 power <- read.table("household_power_consumption.txt", sep = ";", header = TRUE)
+power2 <- as_tibble(power)
 
 ## To view variable names of data set
 
 head(power) 
 
-## Filter out only rows in SCC data set relating to 1 Feb 2007 and 2 Feb 2007
+## Filter out only rows relating to 1 Feb 2007 and 2 Feb 2007
 
 subset <- dplyr::filter(power, grepl('1/2/2007|2/2/2007', Date)) 
 
@@ -14,10 +15,13 @@ subset <- dplyr::filter(power, grepl('1/2/2007|2/2/2007', Date))
 
 subset$Global_active_power <- as.numeric(subset$Global_active_power)
 
-## Create histogram of global active power based on the "subset" dataset
+## Create file and set dimensions.
 
-plot1 <- hist(subset$Global_active_power, xlab = "Global Active Power", ylab = "Frequency")
+png("plot1.png", width=480, height=480)
 
-##Create PNG file
+## Create histogram of global active power based on the "subset" dataset.
 
-png("plot1.png")
+plot1 <- hist(subset$Global_active_power, main="Global Active Power", xlab = "Global Active Power (kilowatts)", ylab = "Frequency", col="Red")
+
+## Reset device.
+dev.off()

@@ -2,10 +2,6 @@
 
 power <- read.table("household_power_consumption.txt", sep = ";", header = TRUE)
 
-## To view variable names of data set
-
-head(power) 
-
 ## Filter out only rows in SCC data set relating to 1 Feb 2007 and 2 Feb 2007
 
 subset <- power[which(power$Date == "1/2/2007" | power$Date == "2/2/2007"), ]
@@ -20,14 +16,24 @@ subset$datetime <- strptime(subset$datetime, "%d/%m/%Y %H:%M:%S")
 class(subset$datetime)
 subset$datetime <- as.POSIXlt(subset$datetime)
 
+# set output
+png("plot4.png", width=480, height=480)
+
 ## Create graphs of different variables (e.g. global active power, voltage, energy sub metering, global reactive power) over time, based on the "subset" dataset
 
-plot4 <- par(mfrow=c(2,2))
-plot4a <- plot2
-plot4b <- plot(subset$datetime, subset$Voltage, type = "l", xlab = "Day/Time", ylab = "Voltage")
-plot4c <- plot3
-plot4d <- plot(subset$datetime, subset$Global_reactive_power, type = "l", xlab = "Day/Time", ylab = "Global_reactive_power")
+par(mfrow=c(2,2))
 
-##Create PNG file
+plot(subset$datetime, subset$Global_active_power, type="l", xlab="", ylab="Global Active Power")
 
-png("plot4.png")
+plot(subset$datetime,subset$Voltage, type="l", xlab="datetime", ylab="Voltage")
+
+plot(subset$datetime, subset$Sub_metering_1, type="l", xlab="", ylab="Energy sub metering")
+lines(subset$datetime, subset$Sub_metering_2, col="red")
+lines(subset$datetime, subset$Sub_metering_3,col="blue")
+legend("topright", col=c("black","red","blue"),c("Sub_metering_1  ","Sub_metering_2  ","Sub_metering_3  "), lty=c(1,1), bty="n", cex=.5) 
+
+plot(subset$datetime, subset$Global_reactive_power, type="l", xlab="datetime", ylab="Global_reactive_power")
+
+## Reset device
+
+dev.off()

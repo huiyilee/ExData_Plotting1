@@ -2,10 +2,6 @@
 
 power <- read.table("household_power_consumption.txt", sep = ";", header = TRUE)
 
-## To view variable names of data set
-
-head(power) 
-
 ## Filter out only rows in SCC data set relating to 1 Feb 2007 and 2 Feb 2007
 
 subset <- power[which(power$Date == "1/2/2007" | power$Date == "2/2/2007"), ]
@@ -25,15 +21,17 @@ subset$datetime <- as.POSIXct(subset$datetime)
 install.packages("ggplot2")
 library("ggplot2")
 
-## Create graph of energy sub metering over time, based on the "subset" dataset
+## Create file and set dimensions.
 
-plot3 <- {ggplot() + 
-                geom_line(data = subset, aes(x = datetime, y = Sub_metering_1), color = "black") + 
-                geom_line(data = subset, aes(x = datetime, y = Sub_metering_2), color = "red") + 
-                geom_line(data = subset, aes(x = datetime, y = Sub_metering_3), color = "blue") + 
-                xlab('Day/Time') + 
-                ylab('Energy sub metering') }
+png("plot3.png", width=480, height=480)
 
-##Create PNG file
+## Create graph of energy sub metering over time, based on the "subset" dataset.
 
-png("plot3.png")
+plot(subset$datetime, subset$Sub_metering_1, type="l", xlab="", ylab="Energy sub metering")
+lines(subset$datetime, subset$Sub_metering_2,col="red")
+lines(subset$datetime, subset$Sub_metering_3,col="blue")
+legend("topright",col=c("black","red","blue"),c("Sub_metering_1  ","Sub_metering_2  ", "Sub_metering_3  "),lty=c(1,1), lwd=c(1,1))
+
+## Reset device
+
+dev.off()
